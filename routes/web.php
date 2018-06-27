@@ -14,9 +14,15 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::resource('posts', 'PostsController');
-
+Route::get('posts/create', 'PostsController@create');
+//index,showはログインせずアクセス可能
+Route::resource('/posts', 'PostsController', ['only' => ['index', 'show']]);
+//そのほかはログイン時のみ許可
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('/posts', 'PostsController', ['only' => ['store', 'create', 'update', 'destroy',  'edit']]);
+});
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
+

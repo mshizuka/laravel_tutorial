@@ -42,6 +42,7 @@ class PostsController extends Controller
     {
         $post = Post::create($request->all());
         $post ->save();
+        $request->session()->flash('message', '投稿しました');
         return redirect()->route('posts.show', [$post->id]);
     }
 
@@ -78,6 +79,7 @@ class PostsController extends Controller
     {
         $post ->update($request->all());
         $post ->save();
+        $request->session()->flash('message', '更新しました');
         return redirect()->route('posts.show', [$post->id]);
 
     }
@@ -91,6 +93,13 @@ class PostsController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        return redirect()->route('posts.index');
+        return redirect('posts')->with('message', '削除しました');
     }
+
+    /*
+    public function __construct()
+    {
+        S$this->middleware('auth:admin');
+    }
+    */
 }

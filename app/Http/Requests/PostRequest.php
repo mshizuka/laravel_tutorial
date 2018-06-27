@@ -25,7 +25,7 @@ class PostRequest extends FormRequest
     {
         return [
             //
-            'title' => 'required|unique:posts|min:3|max:30',
+            'title' => 'required|min:3|max:30',
             'content' => 'required'
         ];
     }
@@ -34,7 +34,6 @@ class PostRequest extends FormRequest
     {
         return[
             'title.required' => 'タイトルを入力してください',
-            'title.unique' => 'このタイトルは既に使用されています',
             'title.min' => 'タイトルは３文字以上にしてください',
             'title.max' => 'タイトルは30文字以内にしてください',
             'content.required' => '本文を入力してください'

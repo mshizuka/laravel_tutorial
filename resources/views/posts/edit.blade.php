@@ -8,13 +8,13 @@
     {{ csrf_field() }}
     {{ method_field('patch') }}
     <p>
-        <input type="text" name="title" placeholder="タイトルを入力してください" value="{{old('title',$post->title)}}">
+        <input type="text" name="title" style="width:300px;" value="{{old('title',$post->title)}}">
         @if ($errors->has('title'))
         <span class="error">{{ $errors->first('title') }}</span>
         @endif
     </p>
     <p>
-     <textarea name="content" placeholder="記事を入力してください">{{ old('content', $post->content) }}</textarea>
+     <textarea name="content" style="width:300px;" >{{ old('content', $post->content) }}</textarea>
         @if ($errors->has('content'))
         <span class="error">{{ $errors->first('content') }}</span>
         @endif
@@ -24,5 +24,5 @@
     </p>
 </form>
 
-<a href="{{ action('PostsController@index') }}">back</a>
+<a href="{{ action('PostsController@index') }}">戻る</a>
 @endsection

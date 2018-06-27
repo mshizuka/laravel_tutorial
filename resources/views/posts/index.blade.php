@@ -3,40 +3,28 @@
 @section('title', 'index')
 
 @section('content')
-    <h1>Blog</h1>
-    <ul>
+<h1>
+    Blog
+
+</h1>
+        <a href="{{ url('/posts/create') }}">[新規記事作成]</a>
+ <ul>
+
+@if(Session::has('message'))
+ <div class="container mt-2">
+  <div class="alert alert-success">
+  {{ session('message') }}
+  </div>
+</div>
+@endif
+
 @foreach ($posts as $post)
-    <li>{{ $post->title }}</a>
-     更新日：{{ $post->created_at}}
+    <li>
+    <a href="{{ action('PostsController@show', $post)}}" class="show">{{ $post->title }}</a>
+ 更新日：{{ $post->created_at}}
     <a href="{{ action('PostsController@edit', $post)}}" class="edit">[編集]</a>
-{{--ドットインストールのやつ
-    <a href="#" class="del" data-id="{{ $post->id }}">[x]</a>
-    <form method="post" action="{{ url('/posts', $post->id) }}" id="form_{{ $post->id }}">
-      {{ csrf_field() }}
-      {{ method_field('delete') }}
-    </form>
-    <script>
-    (function() {
-    'use strict';
-
-    var cmds = document.getElementsByClassName('del');
-    var i;
-
-    for (i = 0; i < cmds.length; i++) {
-    cmds[i].addEventListener('click', function(e) {
-      e.preventDefault();
-      if (confirm('削除してよろしいですか？')) {
-        document.getElementById('form_' + this.dataset.id).submit();
-      }
-    });
-    }
-
-    })();
-    </script>
---}}
-
     {{ Form::open( ['route' =>['posts.destroy', $post->id],'onSubmit'=> 'return disp();','method'=>'delete']) }}
-    {{ Form::submit('x') }}
+    {{ Form::submit('削除') }}
     {{ Form::close() }}
     <script>
         function disp(){
@@ -50,6 +38,6 @@
 
 @endforeach
 </ul>
-<a href="{{ action('PostsController@create') }}">新規記事作成</a>
+
 
 @endsection

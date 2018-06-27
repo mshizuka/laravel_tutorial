@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -18,14 +18,16 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
-
+    //use AuthenticatesUsers;
+    use AuthenticatesUsers {
+    logout as performLogout;
+  }
     /**
      * Where to redirect users after login.
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = ('posts.index');
 
     /**
      * Create a new controller instance.
@@ -36,4 +38,16 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    protected function authenticated(Request $request, $user)
+    {
+        return redirect('posts')->with('message', 'ログインしました');
+    }
+
+    public function logout(Request $request)
+    {
+        $this->performLogout($request);
+        return redirect('posts')->with('message', 'ログアウトしました');
+  }
+
 }
