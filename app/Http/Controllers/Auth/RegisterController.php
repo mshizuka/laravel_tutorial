@@ -37,7 +37,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-        return redirect('posts')->with('message', '新規登録しました');
+        return redirect('posts');
     }
 
     /**

@@ -20,9 +20,12 @@
         @endif
     </p>
     <p>
-        <input type="submit" value="作成">
+        <input type="submit" value="作成" class="btn">
     </p>
 </form>
-
-<a href="{{ action('PostsController@index') }}">back</a>
+<div>
+    <form action="{{action('PostsController@index')}}">
+        <button class="btn">戻る</button>
+    </form>
+</div>
 @endsection

@@ -13,13 +13,26 @@ class PostsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::latest()->get();
-
-        return view('posts.index', [
-            'posts' => $posts,
-        ]);
+        $keywords = $request->get('keywords');
+        $from = $request->get('fromDate');
+        $to = $request->get('toDate');
+        $query = Post::query();
+        //記事の内容からフリーワード検索
+        if(!empty($keywords)) {
+            $query->where('content','like', "%$keywords%");
+        }
+        //日付入力フォームから得られたデータから絞り込み
+        if($from){
+            $query->whereDate('created_at','>=' ,$from);
+        }
+        if($to){
+            $query->whereDate('created_at','<=' ,$to);
+        }
+        //得られた結果を日付降順で表示
+        $posts = $query->latest('created_at')->paginate(20);
+        return view('posts.index', ['posts' => $posts,]);
     }
 
     /**
@@ -83,6 +96,24 @@ class PostsController extends Controller
         return redirect()->route('posts.show', [$post->id]);
 
     }
+
+    /* コメント投稿時に呼び出されるコントローラのつもり。
+     上のupdateをコピーしている。…と言っても使うデータベースが異なっていたらコントローラー
+     自体も変えるべきなのか・・？(6/27)
+
+       public function comment(PostRequest $request)
+    {
+        $comment ->Comment:create($request->all());  Commentモデルの制約に従って動く
+        Commentモデル作らないと
+        $comment ->save(); これいる？
+        $request->session()->flash('message', 'コメントを投稿しました');
+        return redirect()->route('posts.show', [$post->id]);
+    }
+    コントローラーを一つ更新したら、ウェブルートも追加するっていうのはセットで覚えておいたほうがいいな
+    このコントローラーに対応したルートを追加する必要がある
+    Viewからルートを経由してここの動作を作用させるので・・・
+    */
+
 
     /**
      * Remove the specified resource from storage.

@@ -11,8 +11,18 @@
   </div>
 </div>
 @endif
-
-<h1>{{ $post->title }}</h1>
+<h1>
+<div class="mark">
+{{ $post->title }}
+</div>
+</h1>
+<div class="container">
 <p>{!! nl2br(e($post->content)) !!}</p>
-<a href="{{ action('PostsController@index') }}">[戻る]</a>
+<div>
+    <form action="{{action('PostsController@index')}}">
+        <button class="btn">戻る</button>
+    </form>
+</div>
+</div>
 @endsection
+
