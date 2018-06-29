@@ -13,60 +13,73 @@ Blog
         <button class="btn">新規記事作成</button>
         </form>
     </div>
-
-<div class="search">
+{{-- 検索バー　--}}
+<div>
     {{ Form::open(['route' => 'posts.index','method' => 'GET']) }}
     {{ Form::text('keywords', null,['placeholder'=>'検索ワードを入力']) }}
-    <div>
-    日付指定する場合は以下を選択
         <div>
-        {{ Form::date('fromDate')}}以降
-        {{ Form::date('toDate')}}まで
+        日付指定する場合は以下を選択
+            <div>
+                {{ Form::date('fromDate')}}以降
+                {{ Form::date('toDate')}}まで
+            </div>
+        {{ Form::submit('検索',['class' =>'btn']) }}
+        {{ Form::close() }}
         </div>
-    {{ Form::submit('検索',['class' =>'btn']) }}
-    {{ Form::close() }}
+</div>
+{{-- セッションメッセージ表示箇所 --}}
+<ul>
+    @if(Session::has('message'))
+        <div class="container mt-2">
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        </div>
+    @endif
+{{-- ここまで　--}}
+
+    <div class="paginate">
+        {{ $posts->appends(Request::only('keywords'))->links() }}
     </div>
-</div>
 
- <ul>
-@if(Session::has('message'))
- <div class="container mt-2">
-  <div class="alert alert-success">
-  {{ session('message') }}
-  </div>
-</div>
-@endif
+    <table class="table table-hover">
+        <tr>
+            <th>タイトル</th>
+            <th>更新日</th>
+            <th> </th>
+            <th> </th>
 
-<div class="paginate">
-{{ $posts->appends(Request::only('keywords'))->links() }}
-</div>
-
-@foreach ($posts as $post)
-    <li>
-    <a href="{{ action('PostsController@show', $post)}}" class="show">{{ $post->title }}</a>
- 更新日：{{ $post->created_at}}
-    <div style="display:inline-flex">
-        <form action="{{action('PostsController@edit',$post)}}">
-        <button class="btn">編集</button>
-        </form>
-    </div>
-    <div style="display:inline-flex">
-    {{ Form::open( ['route' =>['posts.destroy', $post->id],'onSubmit'=> 'return disp();','method'=>'delete']) }}
-    {{ Form::submit('削除',['class' =>'btn']) }}
-    {{ Form::close() }}
-    <script>
-        function disp(){
-            if(confirm("本当に削除しますか？")){
-            }else{
-                return false;
-            }
-        };
-</script>
-</div>
+        </tr>
+    @foreach ($posts as $post)
+        <tr>
+            <td>
+                <a href="{{ action('PostsController@show', $post)}}" class="show">{{ $post->title }}</a>
+            </td>
+            <td>{{ $post->created_at}}</td>
+            <td>
+                <form action="{{action('PostsController@edit',$post)}}">
+                <button class="btn">編集</button>
+                </form>
+            </td>
+            <td>
+                {{ Form::open( ['route' =>['posts.destroy', $post->id],'onSubmit'=> 'return disp();','method'=>'delete']) }}
+                {{ Form::submit('削除',['class' =>'btn']) }}
+                {{ Form::close() }}
+            </td>
+        <script>
+            function disp(){
+                if(confirm("本当に削除しますか？")){
+                }else{
+                    return false;
+                }
+            };
+        </script>
+        </div>
     </li>
-@endforeach
+    @endforeach
+    </table>
 <div class="paginate">
-{{ $posts->appends(Request::only('keywords'))->links() }}
+    {{ $posts->appends(Request::only('keywords'))->links() }}
 </div>
 
 </ul>

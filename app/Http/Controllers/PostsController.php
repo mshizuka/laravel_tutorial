@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Post;
+use App\Comment;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -97,24 +98,6 @@ class PostsController extends Controller
 
     }
 
-    /* コメント投稿時に呼び出されるコントローラのつもり。
-     上のupdateをコピーしている。…と言っても使うデータベースが異なっていたらコントローラー
-     自体も変えるべきなのか・・？(6/27)
-
-       public function comment(PostRequest $request)
-    {
-        $comment ->Comment:create($request->all());  Commentモデルの制約に従って動く
-        Commentモデル作らないと
-        $comment ->save(); これいる？
-        $request->session()->flash('message', 'コメントを投稿しました');
-        return redirect()->route('posts.show', [$post->id]);
-    }
-    コントローラーを一つ更新したら、ウェブルートも追加するっていうのはセットで覚えておいたほうがいいな
-    このコントローラーに対応したルートを追加する必要がある
-    Viewからルートを経由してここの動作を作用させるので・・・
-    */
-
-
     /**
      * Remove the specified resource from storage.
      *
@@ -127,10 +110,19 @@ class PostsController extends Controller
         return redirect('posts')->with('message', '削除しました');
     }
 
-    /*
-    public function __construct()
+    public function comment(Request $request)
     {
-        S$this->middleware('auth:admin');
+        $this->validate($request, [
+            'name' => 'required|max:30',
+            'comment' => 'required|min:3|max:30',
+        ],[
+            'name.required' => '※名前を入力してください',
+            'name.max' => '※名前は30文字以内にしてください',
+            'comment.required' => '※コメントを入力してください',
+        ]);
+        Comment::create($request->all());
+        $request->session()->flash('message', 'コメントしました。');
+        return redirect()->route('posts.show', [$request->input('post_id')]);
     }
-    */
+
 }

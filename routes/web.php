@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('posts/create', 'PostsController@create');
+
+//コメント機能用のルート
+Route::post('/comment', 'PostsController@comment');
+
 //index,showはログインせずアクセス可能
 Route::resource('/posts', 'PostsController', ['only' => ['index', 'show']]);
 //そのほかはログイン時のみ許可
