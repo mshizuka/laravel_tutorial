@@ -72,14 +72,18 @@
                 <td>{{ $post->created_at}}</td>
                 <td>{{ $post->user->name }}</td>
                 <td>
+                @can('edit',$post)
                     <div class="btn btn-default" role="button">
                         <a href="{{action('PostsController@edit',$post)}}" class="edit">編集</a>
                     </div>
+                @endcan
                 </td>
                 <td>
+                    @can('destroy',$post)
                     {{ Form::open( ['route' =>['posts.destroy', $post->id],'onSubmit'=> 'return disp();','method'=>'delete']) }}
                     {{ Form::submit('削除',['class' =>'btn-danger']) }}
                     {{ Form::close() }}
+                    @endcan
                 </td>
                 <script>
                 function disp(){

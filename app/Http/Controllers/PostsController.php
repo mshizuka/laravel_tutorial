@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Post;
+use App\User;
 use App\Comment;
 use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PostsController extends Controller
 {
@@ -80,6 +82,7 @@ class PostsController extends Controller
      */
     public function edit(Post $post)
     {
+        $this->authorize('edit', $post);
         return view('posts.edit')->with('post',$post);
     }
 
@@ -107,6 +110,7 @@ class PostsController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('destroy', $post);
         $post->delete();
         return redirect('posts')->with('message', '削除しました');
     }
@@ -115,7 +119,7 @@ class PostsController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:30',
-            'comment' => 'required'
+            'comment' => 'required|min:3|max:30',
         ],[
             'name.required' => '※名前を入力してください',
             'name.max' => '※名前は30文字以内にしてください',
