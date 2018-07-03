@@ -6,6 +6,7 @@ use App\Http\Requests\PostRequest;
 use App\Post;
 use App\Comment;
 use Illuminate\Http\Request;
+//use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
@@ -114,7 +115,7 @@ class PostsController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:30',
-            'comment' => 'required|min:3|max:30',
+            'comment' => 'required'
         ],[
             'name.required' => '※名前を入力してください',
             'name.max' => '※名前は30文字以内にしてください',
