@@ -15,10 +15,16 @@ class CreateCommentsTable extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id') ->unsigned() ->nullable(); //usersテーブルとの紐付け
             $table->integer('post_id') ->unsigned(); //postsテーブルとの紐付け
             $table->string('name');
             $table->text('comment');
             $table->timestamps();
+
+            $table->foreign('user_id')  //外部キー制約の追加
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
 
             $table->foreign('post_id')  //外部キー制約の追加
                 ->references('id')

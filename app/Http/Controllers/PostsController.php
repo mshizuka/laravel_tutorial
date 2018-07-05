@@ -115,19 +115,53 @@ class PostsController extends Controller
         return redirect('posts')->with('message', '削除しました');
     }
 
+//以下コメントに対するもの
+
     public function comment(Request $request)
     {
         $this->validate($request, [
             'name' => 'required|max:30',
-            'comment' => 'required|min:3|max:30',
+            'comment' => 'required',
         ],[
             'name.required' => '※名前を入力してください',
             'name.max' => '※名前は30文字以内にしてください',
             'comment.required' => '※コメントを入力してください',
         ]);
-        Comment::create($request->all());
+        $comment=Comment::create($request->all());
+
         $request->session()->flash('message', 'コメントしました。');
         return redirect()->route('posts.show', [$request->input('post_id')]);
     }
+
+    //コメント編集ページへ遷移
+    public function commentEdit($id,Comment $comment)
+    {
+        //$this->authorize('edit', $post); //認証
+        $comment = Comment::find($id);
+        return view('posts.commentedit')->with('comment',$comment);
+    }
+
+    //コメントをアップデートする
+    public function commentUpdate(Request $request,Comment $comment)
+    {
+        $comment = Comment::findOrFail($request->id);
+        $comment ->update($request->all());
+        $comment ->save();
+        $request->session()->flash('message', 'コメントを編集しました。');
+        return redirect()->route('posts.show', [$request->input('post_id')]);
+    }
+
+    //コメントを削除する
+    public function commentDelete($id,Request $request)
+    {
+    //    $this->authorize('commentDestroy', $post); //認証
+        $comment = Comment::findOrFail($id);
+        $comment ->delete();
+        //viewから記事IDを受け取りリダイレクトさせたかったがうまくいかない
+        //return redirect('posts.show',[$comment->post_id])->with('message', 'コメントを削除しました');
+        $request->session()->flash('message', 'コメントを削除しました。');
+        return redirect()->route('posts.show', [$request->input('post_id')]);
+    }
+
 
 }

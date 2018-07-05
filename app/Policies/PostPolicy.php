@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\User;
 use App\Post;
+use App\Comment;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PostPolicy
@@ -52,6 +53,8 @@ class PostPolicy
      * @param  \App\Post  $post
      * @return mixed
      */
+
+    //以下通常の記事に対する操作
     public function delete(User $user, Post $post)
     {
         //return $user->id === $post->user_id;
@@ -67,5 +70,20 @@ class PostPolicy
     {
         return $user->id === $post->user_id;
     }
+
+//以下コメントに対する操作
+    //コメント編集画面へ移動する
+    public function commentEdit(User $user, Comment $comment)
+    {
+        return $user->id === $comment->user_id;
+    }
+
+    //コメントを削除する
+    public function commentDelete(User $user,Comment $comment)
+    {
+        return $user->id === $comment->user_id;
+    }
+
+
 
 }

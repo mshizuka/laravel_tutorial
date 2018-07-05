@@ -17,20 +17,18 @@
     </div>
     <div class="form-group">
     <label>本文</label>
-     <textarea name="content" class="form-control" >{{ old('content', $post->content) }}</textarea>
+     <textarea rows="7" name="content" class="form-control" >{{ old('content', $post->content) }}</textarea>
         @if ($errors->has('content'))
         <span class="error">{{ $errors->first('content') }}</span>
         @endif
     </div>
     <div class="form-group">
-        <input type="submit" value="編集" class="btn">
+        <button input type="button" class="btn btn-default" onclick="history.back()">戻る</button>
+        <button input type="submit" class="btn btn-success">作成</button>
     </div>
         <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
 </form>
 <div>
-    <form action="{{action('PostsController@index')}}">
-        <button class="btn">戻る</button>
-    </form>
         <div class="comments">
 	<ul class="list-group">
         <li class="list-group-item">コメント</li>

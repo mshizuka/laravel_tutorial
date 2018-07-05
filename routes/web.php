@@ -11,19 +11,20 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function () {return view('welcome');});
 Route::get('posts/create', 'PostsController@create');
-
 //コメント機能用のルート
-Route::post('/comment', 'PostsController@comment');
+Route::get('posts/{id}/commentedit', 'PostsController@commentEdit')->name('posts.commentedit');
+Route::post('/posts/{id}/commentupdate', 'PostsController@commentUpdate')->name('posts.commentupdate');
+Route::patch('/posts/{id}/commentupdate', 'PostsController@commentUpdate')->name('posts.commentupdate');
+Route::post('/comment', 'PostsController@comment')->name('posts.comment');
+Route::delete('posts/commentdelete/{id}','PostsController@commentDelete')->name('posts.commentdelete');
 
 //index,showはログインせずアクセス可能
 Route::resource('/posts', 'PostsController', ['only' => ['index', 'show']]);
 //そのほかはログイン時のみ許可
 Route::group(['middleware' => 'auth'], function () {
-    Route::resource('/posts', 'PostsController', ['only' => ['store', 'create', 'update', 'destroy',  'edit']]);
+Route::resource('/posts', 'PostsController', ['only' => ['store', 'create', 'update', 'destroy', 'edit','commentedit','commentdelete','commentupdate' ]]);
 });
 
 Auth::routes();

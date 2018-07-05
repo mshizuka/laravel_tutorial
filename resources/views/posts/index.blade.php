@@ -28,6 +28,7 @@
                     {{ Form::date('toDate')}}まで
                 </div>
             {{ Form::submit('検索',['class' =>'btn btn-primary']) }}
+            <button class="btn btn-default"><a href="{{ route('posts.index') }}">クリア</a></button>
             {{ Form::close() }}
             </div>
         </div>
