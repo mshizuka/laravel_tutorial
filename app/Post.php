@@ -14,14 +14,14 @@ class Post extends Model
         return $this->hasMany('App\Comment');
     }
 
-    public function addComment($comment)
-    {
-        // 新しいレコードを作成
-    	Comment::create([
-    		'comment' => $comment,
-    		'post_id' => $this->id
-        ]);
-    }
+    // public function addComment($comment)
+    // {
+    //     // 新しいレコードを作成
+    // 	Comment::create([
+    // 		'comment' => $comment,
+    // 		'post_id' => $this->id
+    //     ]);
+    // }
 
     public function user()
     {

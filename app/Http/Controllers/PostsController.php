@@ -23,9 +23,9 @@ class PostsController extends Controller
         $from = $request->get('fromDate');
         $to = $request->get('toDate');
         $query = Post::query();
-        //記事の内容からフリーワード検索
+        //記事の内容からフリーワード検索。orWhereをチェーンして、１つのリクエストでcontent,title両方から検索するように
         if(!empty($keywords)) {
-            $query->where('content','like', "%$keywords%");
+            $query->where('content','like', "%$keywords%")->orWhere('title','like', "%$keywords%");
         }
         //日付入力フォームから得られたデータから絞り込み
         if($from){
@@ -156,11 +156,12 @@ class PostsController extends Controller
     {
     //    $this->authorize('commentDestroy', $post); //認証
         $comment = Comment::findOrFail($id);
+        //↓該当のcommentレコードからpost_idだけを$postsに保持。リダイレクト先の記事IDとして指定するのに使う。
+        $posts = $comment->post_id;
         $comment ->delete();
-        //viewから記事IDを受け取りリダイレクトさせたかったがうまくいかない
-        //return redirect('posts.show',[$comment->post_id])->with('message', 'コメントを削除しました');
         $request->session()->flash('message', 'コメントを削除しました。');
-        return redirect()->route('posts.show', [$request->input('post_id')]);
+        //↓先ほどの$posts（記事ID）を使いshowのビューを表示
+        return redirect()->route('posts.show', ['posts' => $posts]);
     }
 
 

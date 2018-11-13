@@ -45,10 +45,10 @@
         </div>
     @endif
 {{-- ここまで　--}}
-
-    <div class="container">
+{{-- ページネーション --}}
+    <div class="container" style="text-align: center;">
         <div class="paginate">
-            {{ $posts->appends(Request::only('keywords'))->links() }}
+            {{ $posts->appends(Request::only('keywords','fromDate','toDate'))->links() }}
         </div>
 {{-- ページカウント（アイテム数）表示ここから --}}
         <div >
@@ -59,9 +59,9 @@
 {{-- ここから記事一覧　--}}
         <table class="table table-hover">
             <tr>
-                <th>タイトル</th>
-                <th>更新日</th>
-                <th>投稿者</th>
+                <th style="text-align: center;">タイトル</th>
+                <th style="text-align: center;">更新日</th>
+                <th style="text-align: center;"> 投稿者</th>
                 <th> </th>
                 <th> </th>
             </tr>
@@ -96,8 +96,9 @@
                 </script>
         @endforeach
         </table>
+{{-- ページネーション --}}
     <div class="paginate">
-        {{ $posts->appends(Request::only('keywords'))->links() }}
+        {{ $posts->appends(Request::only('keywords','fromDate','toDate'))->links() }}
     </div>
 </div>
 @endsection

@@ -43,16 +43,22 @@
                     </form>
 
 {{-- テキストをボタン風にした編集リンク--}}
+                    @auth
+                    <table>
+                    <tr>
+                    <td>
                     <p><div class="btn btn-default" role="button">
                     <a href="{{route('posts.commentedit', ['id' => $comment])}}" class="edit">編集</a>
-                    </div></p>
+                    </div>
+                    </td>
 {{-- 削除ボタン　--}}
-                @auth
+                    <td>
 　                  <form action="{{ route('posts.commentdelete', ['id' => $comment->id])}}" id="form_{{ $comment->id }}" method="post">
                         {{ csrf_field() }}
                         {{ method_field('delete') }}
                         <a href="#" data-id="{{ $comment->id }}" class="btn btn-danger" onclick="deleteComment(this);">削除</a>
-                       {{-- <input type="hidden" class="post_id" value="{{$comment->post->id}}"> この記事のIDを削除する時にコントローラーに渡したかったがいまいち動かない--}}
+                       {{-- <input type="hidden" class="post_id" value="{{$post->id}}"> --}}
+                       {{-- この記事のIDを削除する時にコントローラーに渡したかったがいまいち動かない。コントローラ側でcommentsテーブルのpost_idを捕まえることにした。 --}}
                     </form>
                     <script>
                     function deleteComment(e) {
@@ -63,6 +69,9 @@
                             }
                         }
                     </script>
+                    </td>
+                    </tr>
+                    </table>
                 @endauth
                 </div>
 {{--ここまで--}}
@@ -78,7 +87,7 @@
     {{ Form::open(['url'=>'/comment',$post->id]) }}
     <div class="form-group">
         <label>名前:
-    </lavel>
+    </label>
         @auth
         {{ auth()->user()->name }}
         <input type="hidden" name="name" value="{{ auth()->user()->name }}">
